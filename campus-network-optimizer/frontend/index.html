@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NETPULSE AI — Network Performance Analyzer</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22><text y=%2226%22 font-size=%2226%22>⚡</text></svg>">
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SIDEBAR NAVIGATION
+       ═══════════════════════════════════════════════════════════════ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-tag">Operational Workspace</span>
+      <div class="brand-title">
+        <span class="glow-indicator"></span>
+        NETPULSE AI
+      </div>
+      <div class="brand-sub">Intelligent Campus Network Optimization</div>
+    </div>
+
+    <ul class="nav-menu">
+      <li>
+        <a href="/" data-page="view-analyzer" class="nav-link active">
+          <span>⚡</span>
+          <span>Network Analyzer</span>
+        </a>
+      </li>
+      <li>
+        <a href="/dataset" data-page="view-dataset" class="nav-link">
+          <span>🗄️</span>
+          <span>Dataset</span>
+        </a>
+      </li>
+      <li>
+        <a href="/analytics" data-page="view-analytics" class="nav-link">
+          <span>📡</span>
+          <span>Analytics</span>
+        </a>
+      </li>
+      <li>
+        <a href="/about" data-page="view-about" class="nav-link">
+          <span>📖</span>
+          <span>About</span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-foot">
+      <div><b>Status:</b> <span style="color:var(--success)">● Online</span></div>
+      <div><b>Records:</b> 54,617 Telemetry Rows</div>
+      <div><b>ML Engine:</b> Random Forest (99.99%)</div>
+      <div><b>Workspace:</b> Ready</div>
+    </div>
+  </aside>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       MAIN OPERATIONAL CONTENT WRAPPER
+       ═══════════════════════════════════════════════════════════════ -->
+  <main class="main-wrapper">
+
+    <!-- PAGE 1: NETWORK ANALYZER (PRIMARY WORKSPACE) -->
+    <section id="view-analyzer" class="page-view active">
+      <h1 class="page-title">NETPULSE AI</h1>
+      <div class="page-subtitle">Analyze network performance and identify problems using Machine Learning.</div>
+
+      <!-- Mode Switcher -->
+      <div class="mode-switcher">
+        <button type="button" id="modeManual" class="mode-btn active">Option A: Manual Input</button>
+        <button type="button" id="modeDataset" class="mode-btn">Option B: Use Dataset Record</button>
+      </div>
+
+      <!-- OPTION A: MANUAL INPUT CONTAINER -->
+      <div id="manualInputContainer">
+        <!-- Quick Preset Buttons -->
+        <div class="preset-bar">
+          <span class="preset-label">Quick Presets:</span>
+          <button type="button" class="preset-btn" data-rtt="11.5" data-loss="0.0" data-jitter="0.8" data-down="95" data-up="35" data-gw="0.5" data-dns="14" data-http="120" data-wifi="88">🟢 Healthy Normal</button>
+          <button type="button" class="preset-btn" data-rtt="72.0" data-loss="0.0" data-jitter="1.4" data-down="45" data-up="15" data-gw="1.0" data-dns="45" data-http="320" data-wifi="75">🟠 High Latency</button>
+          <button type="button" class="preset-btn" data-rtt="14.0" data-loss="8.5" data-jitter="1.2" data-down="20" data-up="8" data-gw="0.8" data-dns="28" data-http="280" data-wifi="80">🔴 Packet Loss</button>
+          <button type="button" class="preset-btn" data-rtt="22.0" data-loss="0.0" data-jitter="28.0" data-down="50" data-up="20" data-gw="1.2" data-dns="22" data-http="180" data-wifi="65">🟣 High Jitter</button>
+        </div>
+
+        <!-- 9 Individual Input Boxes (One Box Per Measurement) -->
+        <div class="input-grid-boxes">
+          <!-- Box 1: Latency / RTT -->
+          <div class="input-card-box">
+            <div class="input-card-header">
+              <label for="inputRtt" class="input-card-title">⏱️ Average Latency / RTT</label>
+              <span class="input-card-unit">ms</span>
+            </div>
+            <input type="number" id="inputRtt" class="input-card-input" value="12.0" step="0.5" min="0" max="2000">
+            <div class="input-card-help">Round-Trip Time. Normal baseline is &lt; 30 ms.</div>
+          </div>
+
+          <!-- Box 2: Packet Loss -->
+          <div class="input-card-box">
+            <div class="input-card-header">
+              <label for="inputLoss" class="input-card-title">📦 Packet Loss</label>
+              <span class="input-card-unit">%</span>
+            </div>
+            <input type="number" id="inputLoss" class="input-card-input" value="0.0" step="0.1" min="0" max="100">
+            <div class="input-card-help">Dropped packets ratio. Normal is 0.00%.</div>
+          </div>
+
+          <!-- Box 3: Jitter -->
+          <div class="input-card-box">
+            <div class="input-card-header">
+              <label for="inputJitter" class="input-card-title">📈 Jitter</label>
+              <span class="input-card-unit">ms</span>
+            </div>
+            <input type="number" id="inputJitter" class="input-card-input" value="1.0" step="0.2" min="0" max="500">
+            <div class="input-card-help">Packet arrival timing variance. Vital for calls.</div>
+          </div>
+
+          <!-- Box 4: Download Speed -->
+          <div class="input-card-box">
+            <div class="input-card-header">
+              <label for="inputDown" class="input-card-title">⬇️ Download Speed</label>
+              <span class="input-card-unit">Mbps</span>
+            </div>
+            <input type="number" id="inputDown" class="input-card-input" value="95.0" step="1" min="0" max="2000">
+            <div class="input-card-help">Downstream bandwidth delivery capacity.</div>
+          </div>
+
+          <!-- Box 5: Upload Speed -->
+          <div class="input-card-box">
+            <div class="input-card-header">
+              <label for="inputUp" class="input-card-title">⬆️ Upload Speed</label>
+              <span class="input-card-unit">Mbps</span>
+            </div>
+            <input type="number" id="inputUp" class="input-card-input" value="30.0" step="0.5" min="0" max="1000">
+            <div class="input-card-help">Upstream bandwidth transmission capacity.</div>
+          </div>
+
+          <!-- Box 6: Wi-Fi Signal Strength -->
+          <div class="input-card-box">
+            <div class="input-card-header">
+              <label for="inputWifi" class="input-card-title">📶 Wi-Fi Signal</label>
+              <span class="input-card-unit">%</span>
+            </div>
+            <input type="number" id="inputWifi" class="input-card-input" value="85.0" step="1" min="0" max="100">
+            <div class="input-card-help">Access point wireless signal reception.</div>
+          </div>
+
+          <!-- Box 7: Gateway Router RTT -->
+          <div class="input-card-box">
+            <div class="input-card-header">
+              <label for="inputGw" class="input-card-title">🔀 Gateway Router RTT</label>
+              <span class="input-card-unit">ms</span>
+            </div>
+            <input type="number" id="inputGw" class="input-card-input" value="0.5" step="0.1" min="0" max="500">
+            <div class="input-card-help">Local router hop delay. Normal is &lt; 2.0 ms.</div>
+          </div>
+
+          <!-- Box 8: DNS Resolution Time -->
+          <div class="input-card-box">
+            <div class="input-card-header">
+              <label for="inputDns" class="input-card-title">🌐 DNS Resolution</label>
+              <span class="input-card-unit">ms</span>
+            </div>
+            <input type="number" id="inputDns" class="input-card-input" value="15.0" step="0.5" min="0" max="1000">
+            <div class="input-card-help">Hostname to IP lookup duration.</div>
+          </div>
+
+          <!-- Box 9: HTTP Response Time -->
+          <div class="input-card-box">
+            <div class="input-card-header">
+              <label for="inputHttp" class="input-card-title">⚡ HTTP Response Time</label>
+              <span class="input-card-unit">ms</span>
+            </div>
+            <input type="number" id="inputHttp" class="input-card-input" value="120.0" step="5" min="0" max="5000">
+            <div class="input-card-help">Web server time-to-first-byte (TTFB).</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OPTION B: DATASET BENCHMARK RECORD -->
+      <div id="datasetInputContainer" style="display: none;">
+        <div class="group-card">
+          <div class="group-title">🗄️ Benchmark Telemetry Record</div>
+          <div class="input-group">
+            <label for="datasetRecordSelect" class="input-label">
+              <span>Select Telemetry Record from Dataset:</span>
+            </label>
+            <select id="datasetRecordSelect" class="dataset-select-box">
+              <option value="">Loading telemetry records from dataset...</option>
+            </select>
+            <div class="input-help">Select a verified benchmark event sample to test how the ML model diagnoses it.</div>
+          </div>
+
+          <!-- Record Preview Strip -->
+          <div id="presetPreviewStrip" class="record-preview-strip">
+            <div class="preview-item">Record: <b>Loading...</b></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LARGE PROMINENT ANALYZE BUTTON -->
+      <button type="button" id="btnAnalyze" class="btn-analyze" style="margin-top: 1.8rem;">
+        ⚡ ANALYZE NETWORK
+      </button>
+
+      <!-- Error / Validation Banner -->
+      <div id="errorBanner" class="error-banner" style="display: none;"></div>
+
+      <!-- STEP 3: OUTPUT SECTION (Appears immediately after analysis) -->
+      <div id="outputSection" style="display: none;">
+        <h2 class="section-heading">PREDICTION & DIAGNOSTIC RESULTS</h2>
+
+        <!-- Main Prediction Result Card -->
+        <div id="resultCard" class="output-card res-normal">
+          <!-- OVERALL PERFORMANCE STATUS (GOOD vs POOR) -->
+          <div class="perf-status-wrapper">
+            <div class="perf-status-kicker">NETWORK PERFORMANCE RATING</div>
+            <div id="resPerfBadge" class="perf-status-badge badge-good">
+              <span id="resPerfIcon" class="perf-status-icon">🟢</span>
+              <span id="resPerfRating" class="perf-status-text">GOOD PERFORMANCE</span>
+            </div>
+            <div id="resPerfSub" class="perf-status-desc">Optimal network health. Telemetry demonstrates low latency, zero packet loss, and robust transmission capacity.</div>
+          </div>
+
+          <div class="output-divider"></div>
+
+          <!-- PRIMARY ML CLASSIFICATION -->
+          <div class="output-kicker">PREDICTED NETWORK CONDITION</div>
+          <div id="resClass" class="output-class">✅ NORMAL OPERATING CONDITION</div>
+          <div id="resConf" class="output-conf">Model Confidence: <b>99.9%</b></div>
+          <div id="resPills" class="output-recap-grid"></div>
+          <div id="resSummary" class="output-summary"><b>Diagnosis Summary:</b> Telemetry indicates nominal state.</div>
+        </div>
+
+        <!-- Recommendations Grid -->
+        <h2 class="section-heading">RECOMMENDED OPTIMIZATION ACTIONS</h2>
+        <div id="recsContainer" class="recs-grid"></div>
+
+        <!-- CONGESTION CONTROL & MITIGATION TECHNIQUES -->
+        <div id="congestionSection" class="congestion-panel" style="display: none;">
+          <div class="congestion-heading">
+            <span>⚡</span>
+            <span>CONGESTION CONTROL & MITIGATION TECHNIQUES</span>
+          </div>
+          <div class="congestion-sub">
+            Industry-standard Computer Networks congestion management and queueing mechanisms matched to this diagnostic profile.
+          </div>
+          <div id="congestionContainer" class="congestion-grid"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 2: DATASET EXPLORER (ISOLATED VIEW CONTAINER) -->
+    <section id="view-dataset" class="page-view" style="display: none;">
+      <h1 class="page-title">Dataset Explorer</h1>
+      <div class="page-subtitle">Inspect telemetry samples, upload custom data, or download the benchmark dataset.</div>
+
+      <div class="metric-grid">
+        <div class="metric-card">
+          <div class="metric-label">Total Records</div>
+          <div class="metric-value">54,617</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Telemetry Features</div>
+          <div class="metric-value">21<span class="metric-unit">Active</span></div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Sampling Window</div>
+          <div class="metric-value">19<span class="metric-unit">Days</span></div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Ground Truth Accuracy</div>
+          <div class="metric-value">99.99<span class="metric-unit">%</span></div>
+        </div>
+      </div>
+
+      <!-- Upload Section -->
+      <div class="input-card" style="margin-bottom:2rem;">
+        <div class="form-group">
+          <label class="form-label">Upload Custom Network Telemetry (CSV):</label>
+          <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:8px;">
+            <input type="file" id="csvUploadInput" accept=".csv" class="form-control" style="max-width:400px;padding:8px 12px;">
+            <button type="button" id="btnUploadFile" class="btn-analyze" style="width:auto;padding:12px 24px;font-size:16px;">
+              📥 Upload & Clean Dataset
+            </button>
+            <a href="/api/dataset/download" class="btn-analyze" style="width:auto;padding:12px 24px;font-size:16px;text-decoration:none;display:inline-flex;align-items:center;background:var(--bg-card);border:1.5px solid var(--border);color:var(--cyan);">
+              ⬇️ Download Cleaned Dataset (CSV)
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table Filter Bar -->
+      <div style="display:flex;gap:16px;margin-bottom:1.2rem;flex-wrap:wrap;align-items:center;">
+        <div>
+          <label for="filterCategory" style="font-size:16px;font-weight:700;color:var(--text-sub);margin-right:8px;">Filter by Category:</label>
+          <select id="filterCategory" class="form-control" style="display:inline-block;width:auto;min-width:200px;">
+            <option value="All">All Categories</option>
+            <option value="Normal">Normal</option>
+            <option value="HighLatency">High Latency</option>
+            <option value="PacketLoss">Packet Loss</option>
+            <option value="HighJitter">High Jitter</option>
+            <option value="Outage">Outage</option>
+          </select>
+        </div>
+        <div>
+          <label for="pageSizeSelect" style="font-size:16px;font-weight:700;color:var(--text-sub);margin-right:8px;">Page Size:</label>
+          <select id="pageSizeSelect" class="form-control" style="display:inline-block;width:auto;min-width:100px;">
+            <option value="25">25 rows</option>
+            <option value="50" selected>50 rows</option>
+            <option value="100">100 rows</option>
+            <option value="200">200 rows</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Telemetry Data Table -->
+      <div class="table-panel">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Index</th>
+              <th>Local Timestamp</th>
+              <th>Condition</th>
+              <th>Latency (RTT)</th>
+              <th>Packet Loss</th>
+              <th>Jitter</th>
+              <th>Download Speed</th>
+              <th>Gateway RTT</th>
+            </tr>
+          </thead>
+          <tbody id="datasetTableBody">
+            <tr><td colspan="8" style="text-align:center;padding:2rem;">Loading telemetry records...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- PAGE 3: ANALYTICS (ISOLATED VIEW CONTAINER) -->
+    <section id="view-analytics" class="page-view" style="display: none;">
+      <h1 class="page-title">Network Telemetry Analytics</h1>
+      <div class="page-subtitle">Core performance metrics and key longitudinal distribution trends.</div>
+
+      <!-- 4 Core Metric Cards -->
+      <div class="metric-grid">
+        <div class="metric-card">
+          <div class="metric-label">Average Latency</div>
+          <div id="metricLatency" class="metric-value">14.2<span class="metric-unit">ms</span></div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Average Packet Loss</div>
+          <div id="metricLoss" class="metric-value">0.12<span class="metric-unit">%</span></div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Average Download Bandwidth</div>
+          <div id="metricDown" class="metric-value">84.6<span class="metric-unit">Mbps</span></div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Normal Baseline Ratio</div>
+          <div id="metricUptime" class="metric-value">86.4<span class="metric-unit">%</span></div>
+        </div>
+      </div>
+
+      <!-- Chart 1: Latency Trend -->
+      <div class="chart-box">
+        <div class="chart-header">1. Longitudinal Network Latency (RTT) Trajectory</div>
+        <div class="chart-sub">Continuous round-trip delay trajectory across all sampling intervals (19 Days).</div>
+        <div class="chart-canvas-wrap">
+          <canvas id="trendCanvas"></canvas>
+        </div>
+        <div class="chart-callout">
+          <b>Operational Insight:</b> Latency remains stable at 11–14 ms during nominal campus hours, with observable spikes during peak class changeovers and high concurrency events.
+        </div>
+      </div>
+
+      <!-- Chart 2: Condition Distribution -->
+      <div class="chart-box">
+        <div class="chart-header">2. Network Condition Frequency Distribution</div>
+        <div class="chart-sub">Distribution of verified normal states versus specific network anomalies.</div>
+        <div class="chart-canvas-wrap">
+          <canvas id="distCanvas"></canvas>
+        </div>
+        <div class="chart-callout">
+          <b>What this demonstrates:</b> Demonstrates that while healthy traffic accounts for over 86% of university hours, isolated packet loss and latency spikes represent distinct failure events.
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 4: ABOUT (ISOLATED VIEW CONTAINER) -->
+    <section id="view-about" class="page-view" style="display: none;">
+      <h1 class="page-title">About NETPULSE AI</h1>
+      <div class="page-subtitle">Intelligent Campus Network Monitoring & Optimization Platform.</div>
+
+      <!-- Hero Card -->
+      <div class="about-hero">
+        <div class="about-hero-icon">⚡</div>
+        <div class="about-hero-body">
+          <div class="about-hero-title">Intelligent Campus Network Operations Control Room</div>
+          NETPULSE AI is an AI-powered network performance diagnosis and optimization system built for university and enterprise environments.
+          It takes real-time network measurements, runs them through an ensemble Random Forest Machine Learning model,
+          and instantly delivers actionable diagnostic reports and industry-standard congestion mitigation techniques.
+        </div>
+      </div>
+
+      <!-- 4 Step Workflow -->
+      <h2 class="section-heading">How NETPULSE AI Operates</h2>
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-title">📥 Enter Telemetry Data</div>
+          <div class="step-desc">Enter measurements manually (Latency, Packet Loss, Jitter, Speeds, Wi-Fi Signal) or select a pre-recorded benchmark sample from the 54,000+ telemetry dataset.</div>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-title">⚡ Analyze with Machine Learning</div>
+          <div class="step-desc">Click Analyze Network to pass features into a trained Random Forest model (150 decision trees) that evaluates non-linear metric boundaries with 99.99% cross-validated accuracy.</div>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-title">🎯 Instant Network Diagnosis</div>
+          <div class="step-desc">The model classifies network health into one of 5 key conditions (Normal, High Latency, Packet Loss, High Jitter, Outage) with confidence probabilities.</div>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">4</div>
+        <div>
+          <div class="step-title">🛠️ Actionable Recommendations & Congestion Techniques</div>
+          <div class="step-desc">Receive targeted operational recommendations and industry-standard Computer Networks Congestion Control mechanisms (FQ-CoDel, TCP BBR, ECN, Token Bucket, QoS/DiffServ).</div>
+        </div>
+      </div>
+
+      <!-- Detectable Conditions -->
+      <h2 class="section-heading">Detectable Network Conditions</h2>
+      <div class="condition-grid">
+        <div class="condition-card">
+          <div class="condition-name" style="color:var(--success)">✅ Normal Baseline</div>
+          <div class="condition-desc">All metrics meet nominal university standards. Zero packet drop, minimal queue latency, and healthy Wi-Fi coverage.</div>
+        </div>
+        <div class="condition-card">
+          <div class="condition-name" style="color:var(--warning)">⏱️ High Latency</div>
+          <div class="condition-desc">Round-trip delay exceeds 35 ms, causing noticeable lag and buffering in interactive classroom lectures and video streams.</div>
+        </div>
+        <div class="condition-card">
+          <div class="condition-name" style="color:var(--error)">📦 Packet Loss</div>
+          <div class="condition-desc">Data packets dropped by switches or cabling faults, forcing TCP congestion collapse and session drops.</div>
+        </div>
+        <div class="condition-card">
+          <div class="condition-name" style="color:var(--violet)">📈 High Jitter</div>
+          <div class="condition-desc">Arrival delay variance fluctuates erratically, causing robotic audio and dropped frames in live VoIP conferences.</div>
+        </div>
+        <div class="condition-card">
+          <div class="condition-name" style="color:var(--error)">🚨 Network Outage</div>
+          <div class="condition-desc">Critical connectivity failure. Transmission line severed or near 100% packet loss across upstream links.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <b>NETPULSE AI</b> &nbsp;·&nbsp;
+      Intelligent Campus Network Performance Optimization System &nbsp;·&nbsp;
+      Operational Control Room Edition
+    </footer>
+  </main>
+
+  <!-- Application Logic -->
+  <script src="/js/app.js"></script>
+</body>
+</html>
+

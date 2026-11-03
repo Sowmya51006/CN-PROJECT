@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NETPULSE AI — Network Telemetry Analytics</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22><text y=%2226%22 font-size=%2226%22>⚡</text></svg>">
+</head>
+<body>
+
+  <!-- SIDEBAR NAVIGATION -->
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-tag">Operational Workspace</span>
+      <div class="brand-title">
+        <span class="glow-indicator"></span>
+        NETPULSE AI
+      </div>
+      <div class="brand-sub">Intelligent Campus Network Optimization</div>
+    </div>
+
+    <ul class="nav-menu">
+      <li>
+        <a href="/" class="nav-link">
+          <span>⚡</span>
+          <span>Network Analyzer</span>
+        </a>
+      </li>
+      <li>
+        <a href="/dataset" class="nav-link">
+          <span>🗄️</span>
+          <span>Dataset</span>
+        </a>
+      </li>
+      <li>
+        <a href="/analytics" class="nav-link active">
+          <span>📡</span>
+          <span>Analytics</span>
+        </a>
+      </li>
+      <li>
+        <a href="/about" class="nav-link">
+          <span>📖</span>
+          <span>About</span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-foot">
+      <div><b>Status:</b> <span style="color:var(--success)">● Online</span></div>
+      <div><b>Records:</b> 54,617 Telemetry Rows</div>
+      <div><b>ML Engine:</b> Random Forest (99.99%)</div>
+      <div><b>Workspace:</b> Ready</div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT: ANALYTICS ONLY -->
+  <main class="main-wrapper">
+    <h1 class="page-title">Network Telemetry Analytics</h1>
+    <div class="page-subtitle">Core performance metrics and key longitudinal distribution trends.</div>
+
+    <!-- 4 Core Metric Cards -->
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="metric-label">Average Latency</div>
+        <div id="metricLatency" class="metric-value">14.2<span class="metric-unit">ms</span></div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Average Packet Loss</div>
+        <div id="metricLoss" class="metric-value">0.12<span class="metric-unit">%</span></div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Average Download Bandwidth</div>
+        <div id="metricDown" class="metric-value">84.6<span class="metric-unit">Mbps</span></div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Normal Baseline Ratio</div>
+        <div id="metricUptime" class="metric-value">86.4<span class="metric-unit">%</span></div>
+      </div>
+    </div>
+
+    <!-- Chart 1: Longitudinal Latency Trend -->
+    <div class="chart-box">
+      <div class="chart-header">1. Longitudinal Network Latency (RTT) Trajectory</div>
+      <div class="chart-sub">Continuous round-trip delay trajectory across all sampling intervals (19 Days).</div>
+      <div class="chart-canvas-wrap">
+        <canvas id="trendCanvas"></canvas>
+      </div>
+      <div class="chart-callout">
+        <b>Operational Insight:</b> Latency remains stable at 11–14 ms during nominal campus hours, with observable spikes during peak class changeovers and high concurrency events.
+      </div>
+    </div>
+
+    <!-- Chart 2: Condition Frequency Distribution -->
+    <div class="chart-box">
+      <div class="chart-header">2. Network Condition Frequency Distribution</div>
+      <div class="chart-sub">Distribution of verified normal states versus specific network anomalies.</div>
+      <div class="chart-canvas-wrap">
+        <canvas id="distCanvas"></canvas>
+      </div>
+      <div class="chart-callout">
+        <b>What this demonstrates:</b> Demonstrates that while healthy traffic accounts for over 86% of university hours, isolated packet loss and latency spikes represent distinct failure events.
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <b>NETPULSE AI</b> &nbsp;·&nbsp;
+      Intelligent Campus Network Performance Optimization System &nbsp;·&nbsp;
+      Operational Control Room Edition
+    </footer>
+  </main>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
+
