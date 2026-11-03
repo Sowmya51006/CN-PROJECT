@@ -207,7 +207,7 @@ def page_network_analyzer():
         </div>
         """, unsafe_allow_html=True)
 
-        p_cols = st.columns(5)
+        p_cols = st.columns(4)
         with p_cols[0]:
             if st.button("🟢 Healthy Normal", use_container_width=True):
                 st.session_state["in_rtt"] = 11.5
@@ -252,17 +252,6 @@ def page_network_analyzer():
                 st.session_state["in_dns"] = 22.0
                 st.session_state["in_http"] = 180.0
                 st.session_state["in_wifi"] = 65.0
-        with p_cols[4]:
-            if st.button("🟡 Gateway Degraded", use_container_width=True):
-                st.session_state["in_rtt"] = 18.0
-                st.session_state["in_loss"] = 0.0
-                st.session_state["in_jit"] = 2.0
-                st.session_state["in_down"] = 60.0
-                st.session_state["in_up"] = 22.0
-                st.session_state["in_gw"] = 12.0
-                st.session_state["in_dns"] = 30.0
-                st.session_state["in_http"] = 210.0
-                st.session_state["in_wifi"] = 70.0
 
         st.markdown("<div style='height:0.8rem'></div>", unsafe_allow_html=True)
 
@@ -371,7 +360,6 @@ def page_network_analyzer():
             ("Record #102 — High Latency Spike", "HighLatency", 102),
             ("Record #504 — Packet Loss Drop Event", "PacketLoss", 504),
             ("Record #88 — High Jitter VoIP Fluctuation", "HighJitter", 88),
-            ("Record #1210 — Gateway Degraded Router Stress", "GatewayDegraded", 1210),
         ]
 
         preset_labels = [p[0] for p in SAMPLE_PRESETS] + ["Custom Row Index from Dataset"]
@@ -431,6 +419,9 @@ def page_network_analyzer():
         p_class = res.get("predicted_class", "Normal")
         conf_pct = res.get("top_class_prob", 0.98) * 100
 
+        if p_class == "GatewayDegraded":
+            p_class = "HighLatency"
+
         # Class visual styling
         CLASS_CONFIG = {
             "Normal": {
@@ -453,11 +444,6 @@ def page_network_analyzer():
                 "title": "HIGH JITTER / DELAY VARIANCE",
                 "summary": "Unstable packet delivery timing detected. Highly damaging to VoIP calls, live broadcasts, and online interactive video.",
             },
-            "GatewayDegraded": {
-                "theme": "res-warning", "color": AMBER, "icon": "⚠️",
-                "title": "GATEWAY ROUTER DEGRADATION",
-                "summary": "Local campus edge router is experiencing latency strain or buffer saturation. The bottleneck is situated right at the local default gateway hop.",
-            },
             "Outage": {
                 "theme": "res-critical", "color": RED, "icon": "🚨",
                 "title": "SEVERE NETWORK OUTAGE",
@@ -478,8 +464,36 @@ def page_network_analyzer():
         down_val = user_inputs.get("download_mbps", 95.0)
         gw_val   = user_inputs.get("gateway_rtt_avg_ms", 0.5)
 
+        # Overall Performance Rating
+        is_good = (p_class == "Normal") and (loss_val < 1.0) and (rtt_val <= 35.0) and (jit_val <= 8.0) and (down_val >= 20.0)
+        perf_badge_class = "badge-good" if is_good else ("badge-poor-warning" if p_class in ["HighLatency", "HighJitter"] else "badge-poor")
+        perf_text = "GOOD PERFORMANCE" if is_good else "POOR PERFORMANCE"
+        perf_icon = "🟢" if is_good else "🔴"
+        if is_good:
+            perf_sub = "Optimal network health. Telemetry demonstrates low latency, zero packet loss, and robust transmission capacity."
+        elif loss_val >= 1.0 or p_class == "PacketLoss":
+            perf_sub = "Significant packet drop detected. High retransmission overhead severely degrades throughput."
+        elif rtt_val > 35.0 or p_class == "HighLatency":
+            perf_sub = "Elevated round-trip latency detected. Causes noticeable delay and buffering in interactive applications."
+        elif jit_val > 8.0 or p_class == "HighJitter":
+            perf_sub = "High delay jitter detected. Produces erratic packet arrivals and disrupts real-time conferencing."
+        else:
+            perf_sub = "Sub-optimal throughput or transmission metrics detected below nominal operational baselines."
+
         st.markdown(f"""
         <div class="np-result-card {cfg['theme']}">
+          <!-- PERFORMANCE RATING BADGE -->
+          <div class="perf-status-wrapper">
+            <div class="perf-status-kicker">NETWORK PERFORMANCE RATING</div>
+            <div class="perf-status-badge {perf_badge_class}">
+              <span class="perf-status-icon">{perf_icon}</span>
+              <span class="perf-status-text">{perf_text}</span>
+            </div>
+            <div class="perf-status-desc">{perf_sub}</div>
+          </div>
+
+          <div class="output-divider"></div>
+
           <div class="res-kicker">PREDICTED NETWORK CONDITION</div>
           <div class="res-class" style="color:{cfg['color']}">{cfg['icon']} {cfg['title']}</div>
           <div class="res-conf">Model Confidence: <b>{conf_pct:.1f}%</b></div>
@@ -682,7 +696,7 @@ def page_network_analyzer():
                     "impl": "Apply ACL-based QoS policy maps at campus building distribution switches."
                 }
             ]
-        elif p_class == "GatewayDegraded" or gw_val > 5.0:
+        elif gw_val > 8.0:
             cong_techs = [
                 {
                     "name": "Hierarchical Token Bucket (HTB) Bandwidth Partitioning",
@@ -929,7 +943,7 @@ def page_analytics():
         counts = df["event_category"].value_counts()
         cmap = {
             "Normal": GREEN, "HighLatency": AMBER, "PacketLoss": RED,
-            "HighJitter": VIOLET, "GatewayDegraded": BLUE, "Outage": "#FF1A40",
+            "HighJitter": VIOLET, "Outage": "#FF1A40",
         }
         fig2 = go.Figure(go.Bar(
             x=counts.index,
@@ -977,7 +991,7 @@ def page_about():
     steps = [
         ("1", "📥", "Enter Network Data", "Input your network measurements manually — latency, packet loss, jitter, download/upload speed, Wi-Fi signal, and more. Or select a pre-recorded dataset sample."),
         ("2", "⚡", "Analyze with AI", "Click Analyze Network. The system sends your data through a trained Random Forest ML model with 150 decision trees that was trained on 54,000+ real telemetry records."),
-        ("3", "🎯", "Get Instant Diagnosis", "The AI classifies your network into one of 6 conditions: Normal, High Latency, Packet Loss, High Jitter, Gateway Degraded, or Outage — with a confidence percentage."),
+        ("3", "🎯", "Get Instant Diagnosis", "The AI classifies your network into one of 5 key conditions: Normal, High Latency, Packet Loss, High Jitter, or Outage — with a confidence percentage."),
         ("4", "🔧", "Follow Recommendations", "Based on the diagnosis, you receive up to 3 specific, actionable recommendations — exactly what to check, why it matters, and how to fix it."),
     ]
 
@@ -1000,7 +1014,6 @@ def page_about():
         ("⏱️", "High Latency", "var(--amber)", "Round-trip time is too high — causes lag, slow loading, video call delays."),
         ("📦", "Packet Loss", "var(--red)", "Data packets are being dropped — causes broken connections and slow speeds."),
         ("📈", "High Jitter", "var(--violet)", "Inconsistent packet timing — causes choppy audio and video in calls."),
-        ("🔀", "Gateway Degraded", "var(--amber)", "Your local router is under stress — bottleneck at the campus edge."),
         ("🚨", "Outage", "var(--red)", "Severe connectivity failure — network is effectively down."),
     ]
 

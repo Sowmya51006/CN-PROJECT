@@ -753,3 +753,85 @@ hr { border-color: var(--border) !important; margin: 0.7rem 0 !important; }
   letter-spacing: 0.04em;
 }
 .np-footer b { color: var(--cyan); }
+
+/* Overall Performance Rating Header */
+.perf-status-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.2rem;
+}
+
+.perf-status-kicker {
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--text-sub);
+  margin-bottom: 0.6rem;
+}
+
+.perf-status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 12px 34px;
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.perf-status-badge.badge-good {
+  background: rgba(53, 211, 153, 0.14);
+  border: 2px solid #35D399;
+  color: #35D399;
+  box-shadow: 0 0 28px rgba(53, 211, 153, 0.35);
+}
+
+.perf-status-badge.badge-poor {
+  background: rgba(251, 113, 133, 0.14);
+  border: 2px solid #FB7185;
+  color: #FB7185;
+  box-shadow: 0 0 28px rgba(251, 113, 133, 0.35);
+}
+
+.perf-status-badge.badge-poor-warning {
+  background: rgba(251, 191, 36, 0.14);
+  border: 2px solid #FBBF24;
+  color: #FBBF24;
+  box-shadow: 0 0 28px rgba(251, 191, 36, 0.35);
+}
+
+.perf-status-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.perf-status-text {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+
+.perf-status-desc {
+  font-size: 16px;
+  color: var(--text-sub);
+  margin-top: 0.7rem;
+  max-width: 780px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.output-divider {
+  width: 100%;
+  max-width: 820px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 1.4rem auto 1.6rem;
+}

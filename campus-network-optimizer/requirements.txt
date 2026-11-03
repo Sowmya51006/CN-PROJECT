@@ -1,7 +1,9 @@
-# NetPulse AI – Python dependencies
+# NetPulse AI — Python dependencies
 # Tested with Python 3.12 on Windows
 # Install with: pip install -r requirements.txt
 
+flask>=3.0.0
+gunicorn>=22.0.0
 streamlit>=1.41.0
 pandas>=2.2.0
 numpy>=1.26.0
